@@ -112,7 +112,7 @@ const CustomBar = (props: CustomBarProps) => {
 };
 
 const CustomXAxisTick = (props: CustomXAxisTickProps) => {
-  const { x, y, payload, textColor, angle, index, visibleTicksCount } = props;
+  const { x, y, payload, textColor, angle } = props;
 
   // const shouldShowWithCounting = visibleTicksCount > 10 ? index % Math.ceil(visibleTicksCount / 10) === 0 : true
 

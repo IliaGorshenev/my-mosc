@@ -14,9 +14,9 @@ const defaultAgeData = [
 ];
 
 export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
-  const total = ageData.reduce((sum, item) => sum + item.value, 0);
-  const maxValue = Math.max(...ageData.map((item) => item.value));
-  const maxPercentage = total > 0 ? Math.round((maxValue / total) * 100) : 0;
+  // const total = ageData.reduce((sum, item) => sum + item.value, 0);
+  // const maxValue = Math.max(...ageData.map((item) => item.value));
+  // const maxPercentage = total > 0 ? Math.round((maxValue / total) * 100) : 0;
 
   const HeaderIcon = () => (
     <svg width="5" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,8 +77,6 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
             grid: 'transparent',
             text: '#B2B2B2',
           }}
-          
-          
         />
       </div>
 

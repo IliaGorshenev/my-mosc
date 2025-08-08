@@ -164,7 +164,9 @@ export const PieChart = ({
                     ? ({ cx, cy, midAngle, outerRadius, percent }) => {
                         const RADIAN = Math.PI / 180;
                         const radius = outerRadius * 1.2;
+                        // @ts-ignore
                         const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                        // @ts-ignore
                         const y = cy + radius * Math.sin(-midAngle * RADIAN);
                         const textAnchor = x > cx ? 'start' : 'end';
 
@@ -180,7 +182,9 @@ export const PieChart = ({
                             fontWeight={400}
                             letterSpacing="0"
                             style={{ lineHeight: '18px' }}>
-                            {`${(percent * 100).toFixed(0)}%`}
+
+                            
+                            {`${(percent || 0 * 100).toFixed(0) }%`}
                           </text>
                         );
                       }
