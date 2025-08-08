@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+@config "../../tailwind.config.js";
+
+@layer base {
+  html,
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
