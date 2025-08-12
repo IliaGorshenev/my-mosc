@@ -1,4 +1,3 @@
-import DefaultLayout from '@/layouts/default';
 import React from 'react';
 import { tv } from 'tailwind-variants';
 
@@ -20,12 +19,10 @@ export const ThreeColumnGrid: React.FC<ThreeColumnGridProps> = ({
   className,
 }) => {
   return (
-    <DefaultLayout>
-      <div className={threeColumnGrid({ className })}>
-        {slot1 && <div className="w-full">{slot1}</div>}
-        {slot2 && <div className="w-full">{slot2}</div>}
-        {slot3 && <div className="w-full">{slot3}</div>}
-      </div>
-    </DefaultLayout>
+    <div className={threeColumnGrid({ className })}>
+      {slot1 && <div className="w-full">{slot1}</div>}
+      {slot2 && <div className="w-full">{slot2}</div>}
+      {slot3 && <div className="w-full">{slot3}</div>}
+    </div>
   );
 };

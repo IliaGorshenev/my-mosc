@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { act, useMemo } from 'react';
 
 interface ActivityData {
   X: number;
@@ -12,14 +12,18 @@ interface HeatMapProps {
 }
 
 const SQUARE_SIZE = 42;
-const MAP_WIDTH = 1863;
-const MAP_HEIGHT = 1069.5;
+const MAP_ASPECT_RATIO = 1863 / 1069.5; // ~1.74
+
+// Base dimensions for calculations (can be scaled)
+const BASE_MAP_WIDTH = 1863;
+const BASE_MAP_HEIGHT = 1069.5;
 
 // Calculate how many squares fit in the map
-const SQUARES_X = Math.ceil(MAP_WIDTH / SQUARE_SIZE);
-const SQUARES_Y = Math.ceil(MAP_HEIGHT / SQUARE_SIZE);
+const SQUARES_X = Math.ceil(BASE_MAP_WIDTH / SQUARE_SIZE);
+const SQUARES_Y = Math.ceil(BASE_MAP_HEIGHT / SQUARE_SIZE);
 
 export const HeatMap: React.FC<HeatMapProps> = ({ activityData, className = '' }) => {
+  console.log(activityData);
   // Create a grid of squares with calculated opacity
   const heatMapGrid = useMemo(() => {
     // Initialize grid with zero activity
@@ -67,25 +71,30 @@ export const HeatMap: React.FC<HeatMapProps> = ({ activityData, className = '' }
   }, [activityData]);
 
   return (
-    <div className={`relative ${className}`} style={{ width: MAP_WIDTH, height: MAP_HEIGHT }}>
+    <div
+      className={`relative ${className}`}
+      style={{
+        width: '100%',
+        aspectRatio: MAP_ASPECT_RATIO.toString(),
+      }}>
       {/* Background map image */}
       <img
-        src="/map.png"
+        src="/map.svg"
         alt="Map"
         className="absolute z-[50] inset-0 w-full h-full object-cover"
         style={{
-          width: MAP_WIDTH,
-          height: MAP_HEIGHT,
-          aspectRatio: '54/31',
+          aspectRatio: MAP_ASPECT_RATIO.toString(),
         }}
       />
       {/* Heat map overlay */}
       <div className="absolute z-[0] inset-0">
         <svg
-          width={MAP_WIDTH}
-          height={MAP_HEIGHT}
-          className="absolute  z-[1] inset-0"
-          style={{ pointerEvents: 'none' }}>
+          width="100%"
+          height="100%"
+          className="absolute z-[1] inset-0"
+          style={{ pointerEvents: 'none' }}
+          viewBox={`0 0 ${BASE_MAP_WIDTH} ${BASE_MAP_HEIGHT}`}
+          preserveAspectRatio="none">
           {heatMapGrid.map((row, y) =>
             row.map((activity, x) => {
               const opacity = Math.min(activity / 100, 1); // Convert activity (0-100) to opacity (0-1)

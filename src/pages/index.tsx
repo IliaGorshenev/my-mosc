@@ -7,7 +7,7 @@ import { Header } from '@/components/header';
 import { HeatMapContainer } from '@/components/heat-map-container';
 import { SexDiagram } from '@/components/sex-diagram';
 import { GridLayout } from '@/layouts/grid';
-import { contentBlockData, sampleItems } from './const';
+import { contentBlockData, contentBlockData2, sampleItems, sampleItems2 } from './const';
 
 export default function IndexPage() {
   return (
@@ -62,12 +62,12 @@ export default function IndexPage() {
           </svg>
 
           <ContentBlock
-            title={contentBlockData.title}
-            subtitle={contentBlockData.subtitle}
-            items={sampleItems}
+
+            title={contentBlockData2.subtitle}
+            items={sampleItems2}
           />
         </div>
       }
-      rightImageSlot={<img src="/robot-1.png" alt="Moscow" />}></GridLayout>
+      rightImageSlot={<img className='mt-auto' src="/robot-1.png" alt="Moscow" />}></GridLayout>
   );
 }

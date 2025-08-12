@@ -50,7 +50,7 @@ export const GridLayout: React.FC<GridLayoutProps> = ({
         <div className={rightColumn()}>
           {rightContentSlot && <div className="w-full">{rightContentSlot}</div>}
           {rightImageSlot && (
-            <div className="w-full">
+            <div className="w-full mt-auto">
               <div className="">{rightImageSlot}</div>
             </div>
           )}

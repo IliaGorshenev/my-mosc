@@ -13,7 +13,7 @@ export const HeatMapContainer: React.FC<HeatMapContainerProps> = ({ className })
     return (
       <div
         className={`flex items-center justify-center ${className}`}
-        style={{ width: 1863, height: 1069.5 }}>
+        style={{ width: '100%', aspectRatio: '1863/1069.5' }}>
         <div className="text-lg">Loading heat map...</div>
       </div>
     );
@@ -23,7 +23,7 @@ export const HeatMapContainer: React.FC<HeatMapContainerProps> = ({ className })
     return (
       <div
         className={`flex items-center justify-center ${className}`}
-        style={{ width: 1863, height: 1069.5 }}>
+        style={{ width: '100%', aspectRatio: '1863/1069.5' }}>
         <div className="text-lg text-red-500">Error loading heat map: {error}</div>
       </div>
     );

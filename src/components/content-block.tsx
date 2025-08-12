@@ -7,8 +7,8 @@ type ContentBlockItem = {
 };
 
 type ContentBlockProps = {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   items: ContentBlockItem[];
 };
 
