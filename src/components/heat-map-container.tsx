@@ -209,7 +209,7 @@ export const HeatMapContainer: React.FC<HeatMapContainerProps> = ({
   }
 
   return (
-    <div className="relative" style={{ width: '100%', aspectRatio: '1863/1069.5' }}>
+    <div className="relative" style={{ width: '100%',  aspectRatio: '1863/1069.5' }}>
       {showVideoStream ? (
         <VideoStream
           streamUrl="http://192.168.10.249:8080/stream.mjpg"

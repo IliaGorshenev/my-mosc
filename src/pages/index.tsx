@@ -97,7 +97,7 @@ export default function IndexPage() {
     <GridLayout
       leftSlot1={<Header />}
       leftSlot2={
-        <BorderBlock>
+        <BorderBlock className="p-0">
           <HeatMapContainer useRealData={true}></HeatMapContainer>
         </BorderBlock>
       }
@@ -105,12 +105,10 @@ export default function IndexPage() {
         <ThreeColumnGrid
           slot1={
             <BorderBlock className="h-full px-14">
-              (
               <SexDiagram
                 maleCount={demographics.gender.male}
                 femaleCount={demographics.gender.female}
               />
-              )
             </BorderBlock>
           }
           slot2={
