@@ -139,7 +139,7 @@ const CardHeader = styled.div<{ isSpecial?: boolean }>`
 const CardTitle = styled.h3<{ isSpecial?: boolean }>`
   color: ${(props) => (props.isSpecial ? '#000' : '#191919')};
   font-family: 'Inter';
-  font-size: ${(props) => (props.isSpecial ? '50px' : '40px')};
+  font-size: ${(props) => (props.isSpecial ? '64px' : '56px')};
   font-style: normal;
   font-weight: 400;
   line-height: 120%;
@@ -157,7 +157,7 @@ const QuantityBadge = styled.div`
   justify-content: center;
   border-radius: 20px;
   font-family: 'Inter';
-  font-size: 32px;
+  font-size: 42px;
   font-style: normal;
   font-weight: 400;
   line-height: 120%;
@@ -204,7 +204,7 @@ const ColorsContainer = styled.div<{ isSpecial?: boolean }>`
     props.isSpecial
       ? `
     display: flex;
-    gap: 30px;
+    gap: 10px;
     flex-direction: column;
     position: absolute;
     bottom: 0px;
@@ -219,11 +219,12 @@ const ColorSwatchContainer = styled.div`
   gap: 20px;
   margin-left: auto;
   justify-content: flex-end;
+  margin-bottom: 65px;
 `;
 
 const ColorSwatchItem = styled.div`
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   border-radius: 999px;
   background-color: ${(props) => props.color || '#000000'};
   border: 2px solid #b2b2b2;
@@ -245,13 +246,13 @@ const SizeRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 `;
 
 const SizeLabel = styled.div<{ isSpecial?: boolean }>`
   color: #000;
   font-family: 'Inter';
-  font-size: ${(props) => (props.isSpecial ? '50px' : '32px')};
+  font-size: ${(props) => (props.isSpecial ? '50px' : '42px')};
   font-style: normal;
   font-weight: 400;
   line-height: 120%;
@@ -260,7 +261,7 @@ const SizeLabel = styled.div<{ isSpecial?: boolean }>`
 const SizeQuantity = styled.div<{ isEmpty: boolean }>`
   color: ${(props) => (props.isEmpty ? '#E60528' : '#000')};
   font-family: 'Inter';
-  font-size: 32px;
+  font-size: 42px;
   font-style: normal;
   font-weight: 400;
   line-height: 120%;
@@ -269,7 +270,7 @@ const SizeQuantity = styled.div<{ isEmpty: boolean }>`
 const QuantityUnit = styled.span`
   color: #000;
   font-family: 'Inter';
-  font-size: 32px;
+  font-size: 42px;
   font-style: normal;
   font-weight: 400;
   line-height: 120%;

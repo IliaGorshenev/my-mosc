@@ -87,7 +87,7 @@ export const ShelfOccupancyBlock2 = ({
           style={{
             color: '#ffffff',
             fontFamily: 'Inter',
-            fontSize: '50px',
+            fontSize: '62px',
             fontStyle: 'normal',
             fontWeight: 500,
             lineHeight: '120%',
