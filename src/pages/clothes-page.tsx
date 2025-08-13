@@ -11,12 +11,12 @@ import { rfidData, rfidItems, rfidRetailData, rfidRetailItems } from './const';
 import { liveIcon } from './pose-page';
 const ItemNotification = ({ item }: { item: ClothingItem }) => {
   // Calculate time ago
-  const getTimeAgo = () => {
-    const seconds = Math.floor((Date.now() - item.timestamp) / 1000);
-    if (seconds < 60) return `${seconds} сек. назад`;
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes} мин. назад`;
-  };
+  // const getTimeAgo = () => {
+  //   const seconds = Math.floor((Date.now() - item.timestamp) / 1000);
+  //   if (seconds < 60) return `${seconds} сек. назад`;
+  //   const minutes = Math.floor(seconds / 60);
+  //   return `${minutes} мин. назад`;
+  // };
 
   return (
     <div
