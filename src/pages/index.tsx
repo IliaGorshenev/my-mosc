@@ -75,7 +75,7 @@ export default function IndexPage() {
     fetchDemographics();
 
     // Optional: Set up polling for real-time updates
-    const interval = setInterval(fetchDemographics, 60000); // Update every minute
+    const interval = setInterval(fetchDemographics, 1000); // Update every minute
 
     return () => clearInterval(interval);
   }, []);
@@ -92,41 +92,22 @@ export default function IndexPage() {
         <ThreeColumnGrid
           slot1={
             <BorderBlock className="h-full px-14">
-              {loading ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-lg">Загрузка данных...</p>
-                </div>
-              ) : (
-                <SexDiagram
-                  maleCount={demographics.gender.male}
-                  femaleCount={demographics.gender.female}
-                />
-              )}
+              (
+              <SexDiagram
+                maleCount={demographics.gender.male}
+                femaleCount={demographics.gender.female}
+              />
+              )
             </BorderBlock>
           }
           slot2={
-            <BorderBlock className="h-full pb-0 px-14" >
-              {loading ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-lg">Загрузка данных...</p>
-                </div>
-              ) : (
-                <AgeDiagram ageData={demographics.age} />
-              )}
+            <BorderBlock className="h-full pb-0 px-14">
+              <AgeDiagram ageData={demographics.age} />
             </BorderBlock>
           }
           slot3={
             <BorderBlock className="h-full px-14">
-              {loading ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-lg">Загрузка данных...</p>
-                </div>
-              ) : (
-                <VisitorsDiagram
-                  totalCount={demographics.total}
-                  hourlyCount={demographics.hourly}
-                />
-              )}
+              <VisitorsDiagram totalCount={demographics.total} hourlyCount={demographics.hourly} />
             </BorderBlock>
           }></ThreeColumnGrid>
       }
