@@ -343,43 +343,45 @@ export const ClothingGrid: React.FC = () => {
     const fetchClothes = async () => {
       try {
         setLoading(true);
-        // const response = await fetch('http://192.168.10.244:8001');
+        const response = await fetch('http://192.168.10.244:8001');
 
-        // if (!response.ok) {
-        //   throw new Error('Failed to fetch clothes data');
-        // }
+        if (!response.ok) {
+          throw new Error('Failed to fetch clothes data');
+        }
 
-        const data = [
-          {
-            name: 'Бомбер на кнопках Москва',
-            sizes: [{ size: 'S-M', amount: 3 }],
-            colors: ['red'],
-          },
-          {
-            name: 'Костюм космонавта детский',
-            sizes: [{ size: 'S', amount: 5 }],
-            colors: ['blue', 'pink', 'gray'],
-          },
-          {
-            name: 'Толстовка на молнии Москва',
-            sizes: [{ size: 'L-XL', amount: 1 }],
-            colors: ['milk'],
-          },
-          {
-            name: 'Футболка оверсайз Москва',
-            sizes: [{ size: 'XXL-XXXL', amount: 1 }],
-            colors: ['red'],
-          },
-          {
-            name: 'Худи оверсайз Москва',
-            sizes: [
-              { size: 'L-XL', amount: 2 },
-              { size: 'S-M', amount: 2 },
-              { size: 'XXL-XXXL', amount: 2 },
-            ],
-            colors: ['milk', 'red'],
-          },
-        ];
+        const data = await response.json();
+
+        // const data = [
+        //   {
+        //     name: 'Бомбер на кнопках Москва',
+        //     sizes: [{ size: 'S-M', amount: 3 }],
+        //     colors: ['red'],
+        //   },
+        //   {
+        //     name: 'Костюм космонавта детский',
+        //     sizes: [{ size: 'S', amount: 5 }],
+        //     colors: ['blue', 'pink', 'gray'],
+        //   },
+        //   {
+        //     name: 'Толстовка на молнии Москва',
+        //     sizes: [{ size: 'L-XL', amount: 1 }],
+        //     colors: ['milk'],
+        //   },
+        //   {
+        //     name: 'Футболка оверсайз Москва',
+        //     sizes: [{ size: 'XXL-XXXL', amount: 1 }],
+        //     colors: ['red'],
+        //   },
+        //   {
+        //     name: 'Худи оверсайз Москва',
+        //     sizes: [
+        //       { size: 'L-XL', amount: 2 },
+        //       { size: 'S-M', amount: 2 },
+        //       { size: 'XXL-XXXL', amount: 2 },
+        //     ],
+        //     colors: ['milk', 'red'],
+        //   },
+        // ];
 
         // Create a mapping between API product names and our hardcoded products
         const productNameMapping: Record<string, number> = {
