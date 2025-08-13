@@ -214,8 +214,8 @@ const ClothesPage = () => {
   // Clean up old notifications after 5 minutes
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
-      const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-      setStorenItems((prev) => prev.filter((item) => item.timestamp > fiveMinutesAgo));
+      const thirtySecondsAgo = Date.now() - 30 * 1000;
+      setStorenItems((prev) => prev.filter((item) => item.timestamp > thirtySecondsAgo));
     }, 30000); // Check every 30 seconds
 
     return () => clearInterval(cleanupInterval);

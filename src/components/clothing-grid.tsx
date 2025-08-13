@@ -49,14 +49,14 @@ const products = [
   {
     id: 5,
     name: 'Толстовка на молнии Москва',
-    image: '/clothes-5.svg',
+    image: '/clothes-6.svg',
     colors: ['#BD93FF', '#000000', '#FFFFFF'],
     sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
   {
     id: 6,
     name: 'Бомбер на кнопках Москва',
-    image: '/clothes-6.svg',
+    image: '/clothes-5.svg',
     colors: ['#000000', '#FFFFFF', '#BD93FF'],
     sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
