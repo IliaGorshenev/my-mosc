@@ -40,7 +40,7 @@ export default function IndexPage() {
       { name: '50-59', value: 3 },
     ],
   });
-
+  // @ts-ignore
   const [loading, setLoading] = useState(true);
   // @ts-ignore
   const [error, setError] = useState<string | null>(null);
