@@ -10,11 +10,7 @@ export const VisitorsDiagram = ({ totalCount, hourlyCount }: VisitorsDiagramProp
         <rect y="0.5" width="5" height="5" rx="2.5" fill="#191919" />
       </g>
     </svg>
-  );
-  const animationStyle =  { 
-    transition: 'none',
-    animation: 'none'
-  };
+  ); 
   return (
     <div
       style={{
