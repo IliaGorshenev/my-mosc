@@ -262,7 +262,7 @@ const ClothesPage = () => {
                 {stolenItems.length > 0 ? (
                   <ItemNotification key={stolenItems[0].id} item={stolenItems[0]} />
                 ) : (
-                  <p className="text-gray-500 text-4xl">Все товары на месте</p>
+                  <p className="text-gray-500 text-4xl mt-auto">Все товары на месте</p>
                 )}
               </div>
             </BorderBlock>
