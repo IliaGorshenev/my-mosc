@@ -30,42 +30,42 @@ const products = [
     name: 'Футболка оверсайз Москва',
     image: '/clothes-2.svg',
     colors: ['#E60528', '#64ACFF', '#BD93FF'],
-    sizes: { XS: 1, S: 1, M: 2, L: 2, XL: 2 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
   {
     id: 3,
     name: 'Лонгслив мужской МОСКВА',
     image: '/clothes-3.svg',
     colors: ['#E60528'],
-    sizes: { XS: 2, S: 2, M: 2, L: 1, XL: 1 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
   {
     id: 4,
     name: 'Худи оверсайз Москва',
     image: '/clothes-4.svg',
     colors: ['#FFC0CB', '#FFFFFF', '#000000'],
-    sizes: { XS: 1, S: 2, M: 1, L: 2, XL: 2 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
   {
     id: 5,
     name: 'Толстовка на молнии Москва',
     image: '/clothes-5.svg',
     colors: ['#BD93FF', '#000000', '#FFFFFF'],
-    sizes: { XS: 2, S: 2, M: 2, L: 1, XL: 1 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
   {
     id: 6,
     name: 'Бомбер на кнопках Москва',
     image: '/clothes-6.svg',
     colors: ['#000000', '#FFFFFF', '#BD93FF'],
-    sizes: { XS: 1, S: 2, M: 1, L: 2, XL: 2 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
   {
     id: 9,
     name: 'Детский костюм космонавта',
     image: '/clothes-9.svg',
     colors: ['#000000', '#FFFFFF', '#E60528'],
-    sizes: { XS: 5, S: 5, M: 5, L: 5, XL: 5 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
     isSpecial: true, // Mark this as a special item
   },
 ];
@@ -460,7 +460,7 @@ export const ClothingGrid: React.FC = () => {
 
     const intervalId = setInterval(() => {
       fetchClothes();
-    }, 10000);
+    }, 1000);
 
     // Clean up the interval when component unmounts
     return () => clearInterval(intervalId);
