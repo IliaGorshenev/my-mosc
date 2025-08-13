@@ -130,7 +130,6 @@ const ClothesPage = () => {
   const [stolenItems, setStorenItems] = useAtom(stolenItemsAtom);
   const [currentItems, setCurrentItems] = useAtom(currentItemsAtom);
   const [lastFetchedItems, setLastFetchedItems] = useState<string[]>([]);
-
   // Mock function to fetch items (replace with your actual API call)
   // Real function to fetch items from the API
   const fetchItems = async () => {
@@ -252,7 +251,7 @@ const ClothesPage = () => {
         <ThreeColumnGrid
           slot1={
             <BorderBlock className="bg-[#E60528] w-[590px] h-full">
-              <ShelfOccupancyBlock2 title="Всего товаров" percentage={90} />
+             <ShelfOccupancyBlock2 title="Всего товаров" percentage={currentItems.length || 0} />
             </BorderBlock>
           }
           slot2={
