@@ -3,6 +3,7 @@ import { ContentBlock } from '@/components/content-block';
 import { ThreeColumnGrid } from '@/components/footer-grid';
 import { Header } from '@/components/header';
 import { GridLayout } from '@/layouts/grid';
+import { useEffect, useState } from 'react';
 import {
   retailApplicationData,
   retailApplicationItems,
@@ -10,6 +11,12 @@ import {
   shelfMonitoringItems,
 } from './const';
 import { liveIcon } from './pose-page';
+
+// Define the type for shelf data
+interface ShelfData {
+  shelf_id: number;
+  filling_percent: number;
+}
 
 export const ShelfOccupancyBlock = ({
   title,
@@ -36,7 +43,7 @@ export const ShelfOccupancyBlock = ({
         gap: '40px',
         height: '100%',
         width: '100%',
-        padding: '0 40px'
+        padding: '0 40px',
       }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -85,7 +92,46 @@ export const ShelfOccupancyBlock = ({
     </div>
   );
 };
+
 const ShopPage = () => {
+  const [shelfData, setShelfData] = useState<ShelfData[]>([
+    { shelf_id: 1, filling_percent: 90 },
+    { shelf_id: 2, filling_percent: 75 },
+    { shelf_id: 3, filling_percent: 82 },
+  ]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchShelfData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/shelfes');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data: ShelfData[] = await response.json();
+        setShelfData(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching shelf data:', err);
+        setError('Failed to load shelf data');
+        // Keep the default data in case of error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchShelfData();
+
+    // Optional: Set up polling to refresh data periodically
+    const intervalId = setInterval(fetchShelfData, 30000); // Refresh every 30 seconds
+
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
+
   return (
     <GridLayout
       leftSlot1={
@@ -127,17 +173,26 @@ const ShopPage = () => {
         <ThreeColumnGrid
           slot1={
             <BorderBlock className="h-full">
-              <ShelfOccupancyBlock title="Заполненность полки 1" percentage={90} />
+              <ShelfOccupancyBlock
+                title="Заполненность полки 1"
+                percentage={shelfData[0]?.filling_percent || 0}
+              />
             </BorderBlock>
           }
           slot2={
             <BorderBlock className="h-full">
-              <ShelfOccupancyBlock title="Заполненность полки 2" percentage={75} />
+              <ShelfOccupancyBlock
+                title="Заполненность полки 2"
+                percentage={shelfData[1]?.filling_percent || 0}
+              />
             </BorderBlock>
           }
           slot3={
             <BorderBlock className="h-full">
-              <ShelfOccupancyBlock title="Заполненность полки 3" percentage={82} />
+              <ShelfOccupancyBlock
+                title="Заполненность полки 3"
+                percentage={shelfData[2]?.filling_percent || 0}
+              />
             </BorderBlock>
           }></ThreeColumnGrid>
       }
@@ -164,7 +219,7 @@ const ShopPage = () => {
           />
         </div>
       }
-      rightImageSlot={<img className='mt-auto'  src="/robot-2.png" alt="Moscow" />}></GridLayout>
+      rightImageSlot={<img className="mt-auto" src="/robot-2.png" alt="Moscow" />}></GridLayout>
   );
 };
 
