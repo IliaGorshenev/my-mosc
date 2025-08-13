@@ -22,11 +22,16 @@ const ItemNotification = ({ item }: { item: ClothingItem }) => {
     <div
       style={{
         padding: '24px',
-        marginBottom: '16px',
         borderRadius: '20px',
         backgroundColor: 'white',
       }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          minHeight: '100%',
+        }}>
         <h3
           style={{
             color: '#191919',
@@ -36,20 +41,10 @@ const ItemNotification = ({ item }: { item: ClothingItem }) => {
             fontWeight: 500,
             lineHeight: '120%',
             margin: 0,
+            marginBottom: '8px',
           }}>
           {item.name}
         </h3>
-        <span
-          style={{
-            color: '#191919',
-            fontFamily: 'Inter',
-            fontSize: '26px',
-            fontStyle: 'normal',
-            fontWeight: 400,
-            opacity: 0.6,
-          }}>
-          {getTimeAgo()}
-        </span>
       </div>
       <p
         style={{
@@ -59,7 +54,6 @@ const ItemNotification = ({ item }: { item: ClothingItem }) => {
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: '120%',
-          marginTop: '12px',
           marginBottom: 0,
         }}>
         Взят с полки, но не оплачен!
@@ -262,9 +256,9 @@ const ClothesPage = () => {
             </BorderBlock>
           }
           slot2={
-            <BorderBlock className="h-full overflow-auto">
-              <div className="p-6">
-                <h2 className="text-6xl font-bold mb-4">Мониторинг товаров</h2>
+            <BorderBlock className="h-full overflow-auto ">
+              <div className="h-full flex flex-col">
+                <h2 className="text-6xl px-4 font-bold mb-30">Мониторинг товаров</h2>
                 {stolenItems.length > 0 ? (
                   <ItemNotification key={stolenItems[0].id} item={stolenItems[0]} />
                 ) : (
