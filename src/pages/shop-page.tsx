@@ -2,6 +2,7 @@ import { BorderBlock } from '@/components/border-block';
 import { ContentBlock } from '@/components/content-block';
 import { ThreeColumnGrid } from '@/components/footer-grid';
 import { Header } from '@/components/header';
+import { VideoStream } from '@/components/video-stream';
 import { GridLayout } from '@/layouts/grid';
 import { useEffect, useState } from 'react';
 import {
@@ -95,20 +96,22 @@ export const ShelfOccupancyBlock = ({
 
 const ShopPage = () => {
   const [shelfData, setShelfData] = useState<ShelfData[]>([
-    { shelf_id: 1, filling_percent: 90 },
-    { shelf_id: 2, filling_percent: 75 },
-    { shelf_id: 3, filling_percent: 82 },
+    { shelf_id: 1, filling_percent: 100 },
+    { shelf_id: 2, filling_percent: 100 },
+    { shelf_id: 3, filling_percent: 100 },
   ]);
+
   // @ts-ignore
   const [loading, setLoading] = useState(true);
   // @ts-ignore
   const [error, setError] = useState<string | null>(null);
+  const [streamError, setStreamError] = useState(false);
 
   useEffect(() => {
     const fetchShelfData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/shelfes');
+        const response = await fetch('http://192.168.10.249:8084/shelfes');
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -128,11 +131,15 @@ const ShopPage = () => {
 
     fetchShelfData();
 
-    // Optional: Set up polling to refresh data periodically
+    // Set up polling to refresh data periodically
     const intervalId = setInterval(fetchShelfData, 30000); // Refresh every 30 seconds
 
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
+
+  const handleStreamError = () => {
+    setStreamError(true);
+  };
 
   return (
     <GridLayout
@@ -161,15 +168,25 @@ const ShopPage = () => {
         />
       }
       leftSlot2={
-        <img
-          src="/shop.png"
-          alt="Shop"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
-        />
+        streamError ? (
+          <img
+            src="/shop.png"
+            alt="Shop"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        ) : (
+          <div style={{ width: '100%', height: '100%' }}>
+            <VideoStream
+              streamUrl="http://192.168.10.249:8083/stream.mjpg"
+              onError={handleStreamError}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )
       }
       leftSlot3={
         <ThreeColumnGrid
