@@ -49,7 +49,7 @@ export default function IndexPage() {
     const fetchDemographics = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/demographics');
+        const response = await fetch('http://localhost:5000/api/stats');
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
