@@ -11,7 +11,10 @@ export const VisitorsDiagram = ({ totalCount, hourlyCount }: VisitorsDiagramProp
       </g>
     </svg>
   );
-
+  const animationStyle =  { 
+    transition: 'none',
+    animation: 'none'
+  };
   return (
     <div
       style={{

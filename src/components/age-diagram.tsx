@@ -78,6 +78,7 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
             grid: 'transparent',
             text: '#B2B2B2',
           }}
+          
         />
       </div>
 

@@ -21,7 +21,7 @@ export const ShelfOccupancyBlock2 = ({
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'space-between',
-        gap: '147px',
+        gap: '250px',
         height: '100%',
         width: '100%',
         padding: '0 40px',
@@ -103,7 +103,7 @@ const ClothesPage = () => {
       leftSlot3={
         <ThreeColumnGrid
           slot1={
-            <BorderBlock className="bg-[#E60528] h-full">
+            <BorderBlock className="bg-[#E60528] w-[590px] h-full">
               <ShelfOccupancyBlock2 title="Всего товаров" percentage={90} />
             </BorderBlock>
           }></ThreeColumnGrid>

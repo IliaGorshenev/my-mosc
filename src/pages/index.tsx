@@ -7,7 +7,7 @@ import { Header } from '@/components/header';
 import { HeatMapContainer } from '@/components/heat-map-container';
 import { SexDiagram } from '@/components/sex-diagram';
 import { GridLayout } from '@/layouts/grid';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { contentBlockData, contentBlockData2, sampleItems, sampleItems2 } from './const';
 
 interface DemographicsData {
@@ -75,10 +75,18 @@ export default function IndexPage() {
     fetchDemographics();
 
     // Optional: Set up polling for real-time updates
-    const interval = setInterval(fetchDemographics, 1000); // Update every minute
+    const interval = setInterval(fetchDemographics, 10000); // Update every minute
 
     return () => clearInterval(interval);
   }, []);
+
+  const memoizedAgeData = useMemo(
+    () => demographics.age,
+    [
+      // Convert the array to a string for comparison
+      JSON.stringify(demographics.age),
+    ],
+  );
 
   return (
     <GridLayout
@@ -102,7 +110,7 @@ export default function IndexPage() {
           }
           slot2={
             <BorderBlock className="h-full pb-0 px-14">
-              <AgeDiagram ageData={demographics.age} />
+              <AgeDiagram ageData={memoizedAgeData} />
             </BorderBlock>
           }
           slot3={
