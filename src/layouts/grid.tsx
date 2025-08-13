@@ -19,7 +19,7 @@ const leftColumn = tv({
 });
 
 const rightColumn = tv({
-  base: 'flex  flex-col gap-y-4 sm:gap-y-8 md:gap-y-12 lg:gap-y-20 h-full py-20 overflow-y-auto',
+  base: 'flex  flex-col gap-y-4 sm:gap-y-8 md:gap-y-12 lg:gap-y-20 h-full pt-61 overflow-y-auto',
 });
 
 interface GridLayoutProps {
@@ -44,8 +44,8 @@ export const GridLayout: React.FC<GridLayoutProps> = ({
       <div className={gridLayout({ className })}>
         <div className={leftColumn()}>
           {leftSlot1 && <div className="w-full flex-shrink-0">{leftSlot1}</div>}
-          {leftSlot2 && <div className="w-full flex-1 min-h-0 overflow-auto">{leftSlot2}</div>}
           {leftSlot3 && <div className="w-full flex-shrink-0">{leftSlot3}</div>}
+          {leftSlot2 && <div className="w-full flex-1 min-h-0 overflow-auto">{leftSlot2}</div>}
         </div>
         <div className={rightColumn()}>
           {rightContentSlot && <div className="w-full flex-shrink-0">{rightContentSlot}</div>}

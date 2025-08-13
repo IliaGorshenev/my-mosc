@@ -7,7 +7,7 @@ import { Header } from '@/components/header';
 import { HeatMapContainer } from '@/components/heat-map-container';
 import { SexDiagram } from '@/components/sex-diagram';
 import { GridLayout } from '@/layouts/grid';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { contentBlockData, contentBlockData2, sampleItems, sampleItems2 } from './const';
 
 interface DemographicsData {
@@ -44,12 +44,14 @@ export default function IndexPage() {
   const [loading, setLoading] = useState(true);
   // @ts-ignore
   const [error, setError] = useState<string | null>(null);
+  // @ts-ignore
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const fetchDemographics = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/stats');
+        const response = await fetch('http://192.168.10.249:5000/api/stats');
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -61,7 +63,10 @@ export default function IndexPage() {
           throw new Error('API returned unsuccessful response');
         }
 
-        setDemographics(result.data);
+        // Use startTransition to mark the state update as non-urgent
+        startTransition(() => {
+          setDemographics(result.data);
+        });
         setError(null);
       } catch (err) {
         console.error('Error fetching demographics data:', err);
@@ -75,7 +80,7 @@ export default function IndexPage() {
     fetchDemographics();
 
     // Optional: Set up polling for real-time updates
-    const interval = setInterval(fetchDemographics, 10000); // Update every minute
+    const interval = setInterval(fetchDemographics, 60000); // Update every minute (changed from 1000ms)
 
     return () => clearInterval(interval);
   }, []);
@@ -134,7 +139,6 @@ export default function IndexPage() {
             xmlns="http://www.w3.org/2000/svg">
             <rect width="1180" height="3" rx="1.5" fill="#DBDBDB" />
           </svg>
-
           <ContentBlock title={contentBlockData2.subtitle} items={sampleItems2} />
         </div>
       }
