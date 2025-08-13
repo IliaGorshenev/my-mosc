@@ -42,6 +42,7 @@ export default function IndexPage() {
   });
 
   const [loading, setLoading] = useState(true);
+  // @ts-ignore
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

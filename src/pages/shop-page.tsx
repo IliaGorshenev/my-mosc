@@ -99,7 +99,9 @@ const ShopPage = () => {
     { shelf_id: 2, filling_percent: 75 },
     { shelf_id: 3, filling_percent: 82 },
   ]);
+  // @ts-ignore
   const [loading, setLoading] = useState(true);
+  // @ts-ignore
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

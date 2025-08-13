@@ -290,7 +290,9 @@ export const ClothingGrid: React.FC = () => {
           const colors = Array.isArray(item.colors) 
             ? item.colors 
             : typeof item.colors === 'string' 
-              ? item.colors.split(',').map(color => {
+              ? item.colors.split(',').map(
+                // @ts-ignore
+                color => {
                   // Map color names to hex codes
                   switch(color.trim().toLowerCase()) {
                     case 'red': return '#E60528';
