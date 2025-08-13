@@ -98,7 +98,7 @@
 // };
 
 import { useActivityData } from '@/hooks/use-activity';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { HeatMap } from './heat-map';
 import { VideoStream } from './video-stream';
 
@@ -108,6 +108,7 @@ interface HeatMapContainerProps {
   showVideoStream?: boolean; // New prop to toggle video stream
 }
 
+ // @ts-ignore
 interface ActivityDataResponse {
   success: boolean;
   data: Array<{
@@ -127,50 +128,54 @@ export const HeatMapContainer: React.FC<HeatMapContainerProps> = ({
     loading: mockLoading,
     error: mockError,
   } = useActivityData();
+  // @ts-ignore
   const [realActivityData, setRealActivityData] = useState<
     Array<{ X: number; Y: number; Activity: number }>
   >([]);
+  // @ts-ignore
   const [loading, setLoading] = useState(true);
+  // @ts-ignore
   const [error, setError] = useState<string | null>(null);
+  // @ts-ignore
   const [streamError, setStreamError] = useState(false);
 
-  useEffect(() => {
-    if (!useRealData) {
-      return; // Skip API call if using mock data
-    }
+  // useEffect(() => {
+  //   if (!useRealData) {
+  //     return; // Skip API call if using mock data
+  //   }
 
-    const fetchActivityData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/activityData');
+  //   const fetchActivityData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await fetch('/api/activityData');
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
 
-        const responseData: ActivityDataResponse = await response.json();
+  //       const responseData: ActivityDataResponse = await response.json();
 
-        if (!responseData.success) {
-          throw new Error('API returned unsuccessful response');
-        }
+  //       if (!responseData.success) {
+  //         throw new Error('API returned unsuccessful response');
+  //       }
 
-        setRealActivityData(responseData.data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching activity data:', err);
-        setError(err instanceof Error ? err.message : 'Unknown error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       setRealActivityData(responseData.data);
+  //       setError(null);
+  //     } catch (err) {
+  //       console.error('Error fetching activity data:', err);
+  //       setError(err instanceof Error ? err.message : 'Unknown error occurred');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchActivityData();
+  //   fetchActivityData();
 
-    // Set up polling for real-time updates
-    const interval = setInterval(fetchActivityData, 5000); // Update every 5 seconds
+  //   // Set up polling for real-time updates
+  //   const interval = setInterval(fetchActivityData, 5000); // Update every 5 seconds
 
-    return () => clearInterval(interval);
-  }, [useRealData]);
+  //   return () => clearInterval(interval);
+  // }, [useRealData]);
 
   // Determine which data and loading state to use
   const finalActivityData = useRealData ? realActivityData : mockActivityData;
@@ -205,7 +210,7 @@ export const HeatMapContainer: React.FC<HeatMapContainerProps> = ({
 
   return (
     <div className="relative" style={{ width: '100%', aspectRatio: '1863/1069.5' }}>
-      {showVideoStream && !streamError ? (
+      {showVideoStream ? (
         <VideoStream
           streamUrl="http://localhost:8080/stream.mjpg"
           className={className}
