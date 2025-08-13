@@ -80,7 +80,7 @@ export default function IndexPage() {
     fetchDemographics();
 
     // Optional: Set up polling for real-time updates
-    const interval = setInterval(fetchDemographics, 60000); // Update every minute (changed from 1000ms)
+    const interval = setInterval(fetchDemographics, 10000); // Update every minute (changed from 1000ms)
 
     return () => clearInterval(interval);
   }, []);
