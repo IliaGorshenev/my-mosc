@@ -33,12 +33,13 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
 
         flexDirection: 'column',
         alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         gap: '40px',
         flex: '1 0 0',
         alignSelf: 'stretch',
       }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' , marginBottom: 'auto'}}>
         <h2
           style={{
             color: '#191919',
@@ -67,7 +68,7 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
       </div>
 
       {/* Chart */}
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', marginTop: 'auto' }}>
         <BarChart
           data={ageData}
           dataKey="value"

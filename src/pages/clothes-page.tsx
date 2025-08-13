@@ -21,10 +21,10 @@ export const ShelfOccupancyBlock2 = ({
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'space-between',
-        gap: '40px',
+        gap: '147px',
         height: '100%',
         width: '100%',
-        padding: '40px',
+        padding: '0 40px',
         backgroundColor: '#E60528',
       }}>
       {/* Header */}

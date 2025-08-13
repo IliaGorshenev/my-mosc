@@ -7,41 +7,125 @@ import { Header } from '@/components/header';
 import { HeatMapContainer } from '@/components/heat-map-container';
 import { SexDiagram } from '@/components/sex-diagram';
 import { GridLayout } from '@/layouts/grid';
+import { useEffect, useState } from 'react';
 import { contentBlockData, contentBlockData2, sampleItems, sampleItems2 } from './const';
 
+interface DemographicsData {
+  gender: {
+    male: number;
+    female: number;
+  };
+  total: number;
+  hourly: number;
+  age: Array<{
+    name: string;
+    value: number;
+  }>;
+}
+
 export default function IndexPage() {
+  const [demographics, setDemographics] = useState<DemographicsData>({
+    gender: {
+      male: 1250,
+      female: 980,
+    },
+    total: 196,
+    hourly: 48,
+    age: [
+      { name: '0-9', value: 2 },
+      { name: '10-19', value: 8 },
+      { name: '20-29', value: 46 },
+      { name: '30-39', value: 38 },
+      { name: '40-49', value: 19 },
+      { name: '50-59', value: 3 },
+    ],
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDemographics = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/demographics');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error('API returned unsuccessful response');
+        }
+
+        setDemographics(result.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching demographics data:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error occurred');
+        // Keep using default values in case of error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDemographics();
+
+    // Optional: Set up polling for real-time updates
+    const interval = setInterval(fetchDemographics, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <GridLayout
       leftSlot1={<Header />}
       leftSlot2={
         <BorderBlock>
-          <HeatMapContainer></HeatMapContainer>
+          <HeatMapContainer useRealData={true}></HeatMapContainer>
         </BorderBlock>
       }
       leftSlot3={
         <ThreeColumnGrid
           slot1={
-            <BorderBlock className="h-full">
-              <SexDiagram maleCount={1250} femaleCount={980} />
+            <BorderBlock className="h-full px-14">
+              {loading ? (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-lg">Загрузка данных...</p>
+                </div>
+              ) : (
+                <SexDiagram
+                  maleCount={demographics.gender.male}
+                  femaleCount={demographics.gender.female}
+                />
+              )}
             </BorderBlock>
           }
           slot2={
-            <BorderBlock className="h-full">
-              <AgeDiagram
-                ageData={[
-                  { name: '0-9', value: 2 },
-                  { name: '10-19', value: 8 },
-                  { name: '20-29', value: 46 },
-                  { name: '30-39', value: 38 },
-                  { name: '40-49', value: 19 },
-                  { name: '50-59', value: 3 },
-                ]}
-              />
+            <BorderBlock className="h-full pb-0 px-14" >
+              {loading ? (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-lg">Загрузка данных...</p>
+                </div>
+              ) : (
+                <AgeDiagram ageData={demographics.age} />
+              )}
             </BorderBlock>
           }
           slot3={
-            <BorderBlock className="h-full">
-              <VisitorsDiagram totalCount={196} hourlyCount={48} />
+            <BorderBlock className="h-full px-14">
+              {loading ? (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-lg">Загрузка данных...</p>
+                </div>
+              ) : (
+                <VisitorsDiagram
+                  totalCount={demographics.total}
+                  hourlyCount={demographics.hourly}
+                />
+              )}
             </BorderBlock>
           }></ThreeColumnGrid>
       }
@@ -61,13 +145,9 @@ export default function IndexPage() {
             <rect width="1180" height="3" rx="1.5" fill="#DBDBDB" />
           </svg>
 
-          <ContentBlock
-
-            title={contentBlockData2.subtitle}
-            items={sampleItems2}
-          />
+          <ContentBlock title={contentBlockData2.subtitle} items={sampleItems2} />
         </div>
       }
-      rightImageSlot={<img className='mt-auto' src="/robot-1.png" alt="Moscow" />}></GridLayout>
+      rightImageSlot={<img className="mt-auto" src="/robot-1.png" alt="Moscow" />}></GridLayout>
   );
 }

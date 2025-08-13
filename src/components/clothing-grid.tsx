@@ -12,7 +12,6 @@ interface Product {
   id: number;
   name: string;
   image: string;
-  outOfStock: number;
   colors: string[];
   sizes: Size;
 }
@@ -21,7 +20,7 @@ const products = [
     id: 1,
     name: 'Футболка оверсайз МОСКВА',
     image: '/clothes-1.svg',
-    outOfStock: 8,
+
     colors: ['#BD93FF', '#FFFFFF', '#64ACFF'],
     sizes: { XS: 2, S: 2, M: 2, L: 1, XL: 1 },
   },
@@ -29,7 +28,7 @@ const products = [
     id: 2,
     name: 'Футболка оверсайз МОСКВА',
     image: '/clothes-2.svg',
-    outOfStock: 8,
+
     colors: ['#E60528', '#64ACFF', '#BD93FF'],
     sizes: { XS: 1, S: 1, M: 2, L: 2, XL: 2 },
   },
@@ -37,7 +36,7 @@ const products = [
     id: 3,
     name: 'Лонгслив мужской МОСКВА',
     image: '/clothes-3.svg',
-    outOfStock: 8,
+
     colors: ['#E60528'],
     sizes: { XS: 2, S: 2, M: 2, L: 1, XL: 1 },
   },
@@ -45,7 +44,7 @@ const products = [
     id: 4,
     name: 'Худи оверсайз МОСКВА',
     image: '/clothes-4.svg',
-    outOfStock: 8,
+
     colors: ['#FFC0CB', '#FFFFFF', '#000000'],
     sizes: { XS: 1, S: 2, M: 1, L: 2, XL: 2 },
   },
@@ -53,7 +52,7 @@ const products = [
     id: 5,
     name: 'Толстовка на молнии МОСКВА',
     image: '/clothes-5.svg',
-    outOfStock: 8,
+
     colors: ['#BD93FF', '#000000', '#FFFFFF'],
     sizes: { XS: 2, S: 2, M: 2, L: 1, XL: 1 },
   },
@@ -61,29 +60,13 @@ const products = [
     id: 6,
     name: 'Бомбер на кнопках МОСКВА',
     image: '/clothes-6.svg',
-    outOfStock: 8,
+
     colors: ['#000000', '#FFFFFF', '#BD93FF'],
     sizes: { XS: 1, S: 2, M: 1, L: 2, XL: 2 },
   },
-  {
-    id: 7,
-    name: 'Шоппер классика МОСКВА',
-    image: '/clothes-7.svg',
-    outOfStock: 8,
-    colors: ['#BD93FF', '#FFFFFF', '#64ACFF'],
-    sizes: { XS: 0, S: 2, M: 2, L: 2, XL: 2 },
-  },
-  {
-    id: 8,
-    name: 'Сумка-тоут оверсайз МОСКВА',
-    image: '/clothes-8.svg',
-    outOfStock: 8,
-    colors: ['#FFC0CB', '#BD93FF', '#000000'],
-    sizes: { XS: 0, S: 2, M: 1, L: 2, XL: 2 },
-  },
 ];
 
-// ... existing interfaces and product data ...
+
 
 const ColorSwatch: React.FC<{ color: string }> = ({ color }) => (
   <div
@@ -106,13 +89,14 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       style={{
         display: 'flex',
         padding: '40px',
+        paddingLeft: '0',
         flexDirection: 'column',
         alignItems: 'flex-start',
         gap: '40px',
-        flex: '1 0 0',
+        rowGap: '119px',
         alignSelf: 'stretch',
         borderRadius: '40px',
-        border: '3px solid rgba(252, 230, 233, 0.20)',
+        border: '3px solid #DBDBDB',
         background: '#FFF',
       }}>
       {/* Header with name and total quantity */}
@@ -124,6 +108,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           alignItems: 'center',
           gap: '5px',
           alignSelf: 'stretch',
+          paddingLeft: '40px',
         }}>
         <h3
           style={{
@@ -142,7 +127,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             backgroundColor: '#E60528',
             color: 'white',
             padding: '10px 20px',
-            borderRadius: '8px',
+            borderRadius: '20px',
             fontFamily: 'Inter',
             fontSize: '32px',
             fontStyle: 'normal',
@@ -172,9 +157,11 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             src={product.image}
             alt={product.name}
             style={{
-              maxWidth: '100%',
-              height: '400px',
+              width: '100%',
+              height: '420px',
               objectFit: 'contain',
+              objectPosition: 'left',
+              marginLeft: 0,
             }}
           />
         </div>
@@ -191,20 +178,10 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           <div>
             <div
               style={{
-                color: '#000',
-                fontFamily: 'Inter',
-                fontSize: '32px',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                lineHeight: '120%',
-                marginBottom: '15px',
-              }}>
-              Цвета:
-            </div>
-            <div
-              style={{
                 display: 'flex',
                 gap: '20px',
+                marginLeft: 'auto',
+                justifyContent: 'flex-end',
               }}>
               {product.colors.map((color, index) => (
                 <ColorSwatch key={index} color={color} />
@@ -213,19 +190,10 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           </div>
 
           {/* Sizes */}
-          <div>
-            <div
-              style={{
-                color: '#000',
-                fontFamily: 'Inter',
-                fontSize: '32px',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                lineHeight: '120%',
-                marginBottom: '15px',
-              }}>
-              Размеры:
-            </div>
+          <div
+            style={{
+              marginTop: '30px',
+            }}>
             <div
               style={{
                 display: 'flex',
@@ -233,7 +201,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
                 flexWrap: 'wrap',
                 gap: '10px',
               }}>
-              {Object.entries(product.sizes).map(([size, quantity]) => (
+              {Object.entries(product.sizes).map(([size, quantity], index, array) => (
                 <>
                   <div
                     key={size}
@@ -241,6 +209,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
+                      gap: '10px',
                     }}>
                     <div
                       style={{
@@ -262,20 +231,33 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
                         fontWeight: 400,
                         lineHeight: '120%',
                       }}>
-                      {quantity} шт
+                      {quantity}{' '}
+                      <span
+                        style={{
+                          color: '#000',
+                          fontFamily: 'Inter',
+                          fontSize: '32px',
+                          fontStyle: 'normal',
+                          fontWeight: 400,
+                          lineHeight: '120%',
+                          opacity: 0.4,
+                        }}>
+                        шт.
+                      </span>
                     </div>
                   </div>
 
-                  {/* Divider */}
-                  <div
-                    style={{
-                      height: '2px',
-                      alignSelf: 'stretch',
-                      borderRadius: '999px',
-                      opacity: 0.1,
-                      background: '#000',
-                    }}
-                  />
+                  {index < array.length - 1 && (
+                    <div
+                      style={{
+                        height: '2px',
+                        alignSelf: 'stretch',
+                        borderRadius: '999px',
+                        opacity: 0.1,
+                        background: '#000',
+                      }}
+                    />
+                  )}
                 </>
               ))}
             </div>
@@ -287,11 +269,71 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 };
 
 export const ClothingGrid: React.FC = () => {
-  // Calculate total quantity
-//   const totalQuantity = products.reduce((total, product) => {
-//     return total + Object.values(product.sizes).reduce((sum, qty) => sum + qty, 0);
-//   }, 0);
+  const [loading, setLoading] = React.useState(true);
+  const [clothesData, setClothesData] = React.useState<Product[]>(products);
 
+  React.useEffect(() => {
+    const fetchClothes = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/clothes');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch clothes data');
+        }
+        
+        const data = await response.json();
+        
+        // Transform the API data to match our Product interface
+        const transformedData: Product[] = data.map((item: any, index: number) => {
+          // Extract colors from the API response
+          const colors = Array.isArray(item.colors) 
+            ? item.colors 
+            : typeof item.colors === 'string' 
+              ? item.colors.split(',').map(color => {
+                  // Map color names to hex codes
+                  switch(color.trim().toLowerCase()) {
+                    case 'red': return '#E60528';
+                    case 'blue': return '#64ACFF';
+                    case 'white': return '#FFFFFF';
+                    case 'black': return '#000000';
+                    case 'purple': return '#BD93FF';
+                    case 'pink': return '#FFC0CB';
+                    default: return '#000000';
+                  }
+                })
+              : ['#000000'];
+          
+          // Transform sizes array to Size object
+          const sizes: Size = { XS: 0, S: 0, M: 0, L: 0, XL: 0 };
+          if (Array.isArray(item.sizes)) {
+            item.sizes.forEach((sizeItem: { size: string; amount: number }) => {
+              if (sizeItem.size in sizes) {
+                sizes[sizeItem.size as keyof Size] = sizeItem.amount;
+              }
+            });
+          }
+          
+          return {
+            id: index + 1,
+            name: item.name || `Product ${index + 1}`,
+            image: `/clothes-${index + 1}.svg`, // Use existing images
+            colors,
+            sizes
+          };
+        });
+        
+        setClothesData(transformedData);
+      } catch (error) {
+        console.error('Error fetching clothes data:', error);
+        // Fallback to hardcoded data in case of error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClothes();
+  }, []);
   return (
     <div
       style={{
@@ -300,17 +342,23 @@ export const ClothingGrid: React.FC = () => {
         overflow: 'auto',
       }}>
       {/* Products grid */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr 1fr',
-          gap: '20px',
-          marginBottom: '24px',
-        }}>
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <p style={{ fontSize: '24px' }}>Загрузка данных...</p>
+        </div>
+      ) : (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 1fr',
+            gap: '20px',
+            marginBottom: '24px',
+          }}>
+          {clothesData.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

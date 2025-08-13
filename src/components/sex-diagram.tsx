@@ -91,6 +91,7 @@ export const SexDiagram = ({ maleCount, femaleCount }: SexDiagramProps) => {
           display: 'flex',
           width: '100%',
           alignItems: 'flex-end',
+      
           gap: '40px',
         }}>
         {/* Left - Male */}
@@ -101,6 +102,7 @@ export const SexDiagram = ({ maleCount, femaleCount }: SexDiagramProps) => {
             alignItems: 'flex-start',
             gap: '16px',
             flex: '1',
+            transform: 'translateY(50px)',
           }}>
           <MaleLine />
           <div
@@ -148,6 +150,7 @@ export const SexDiagram = ({ maleCount, femaleCount }: SexDiagramProps) => {
             alignItems: 'flex-start',
             gap: '16px',
             flex: '1',
+            transform: 'translateY(50px)',
           }}>
           <FemaleLine />
           <div

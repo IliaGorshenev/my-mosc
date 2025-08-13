@@ -36,7 +36,7 @@ export const ShelfOccupancyBlock = ({
         gap: '40px',
         height: '100%',
         width: '100%',
-        padding: '40px'
+        padding: '0 40px'
       }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

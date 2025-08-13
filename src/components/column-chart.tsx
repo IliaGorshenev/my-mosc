@@ -130,7 +130,7 @@ const CustomXAxisTick = (props: CustomXAxisTickProps) => {
         dy={16}
         textAnchor={angle > 0 ? 'start' : angle < 0 ? 'end' : 'middle'}
         fill={textColor}
-        fontSize={12}
+        fontSize={26}
         transform={`rotate(${angle})`}>
         {displayText}
       </text>
@@ -141,7 +141,7 @@ const CustomXAxisTick = (props: CustomXAxisTickProps) => {
 export const BarChart = ({
   data,
   dataKey,
-  height = 400,
+  height = 440,
   marginTop = 0,
   header,
   rotateLabels = 0,
@@ -173,7 +173,7 @@ export const BarChart = ({
             left: '50%',
             transform: 'translateX(-50%)',
             color: styles.text,
-            fontSize: '14px',
+            fontSize: '26px',
             fontWeight: 500,
             zIndex: 10,
           }}>
@@ -189,7 +189,7 @@ export const BarChart = ({
             transform: 'translateY(-80%) rotate(90deg)',
             transformOrigin: 'center right',
             color: styles.text,
-            fontSize: '14px',
+            fontSize: '26px',
             fontWeight: 500,
             zIndex: 10,
           }}>
@@ -222,6 +222,7 @@ export const BarChart = ({
                 textColor={styles.text}
                 angle={rotateLabels}
                 visibleTicksCount={data.length}
+                size={29}
               />
             )}
             tickMargin={margins.xAxisTickMargin}

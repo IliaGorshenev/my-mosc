@@ -1,33 +1,98 @@
 import { useActivityData } from '@/hooks/use-activity';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HeatMap } from './heat-map';
 
 interface HeatMapContainerProps {
   className?: string;
+  useRealData?: boolean; // Optional prop to toggle between mock and real data
 }
 
-export const HeatMapContainer: React.FC<HeatMapContainerProps> = ({ className }) => {
-  const { activityData, loading, error } = useActivityData();
+interface ActivityDataResponse {
+  success: boolean;
+  data: Array<{
+    X: number;
+    Y: number;
+    Activity: number;
+  }>;
+}
 
-  if (loading) {
+export const HeatMapContainer: React.FC<HeatMapContainerProps> = ({
+  className,
+  useRealData = true, // Default to using real data from API
+}) => {
+  const {
+    activityData: mockActivityData,
+    loading: mockLoading,
+    error: mockError,
+  } = useActivityData();
+  const [realActivityData, setRealActivityData] = useState<
+    Array<{ X: number; Y: number; Activity: number }>
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!useRealData) {
+      return; // Skip API call if using mock data
+    }
+
+    const fetchActivityData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/activityData');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData: ActivityDataResponse = await response.json();
+
+        if (!responseData.success) {
+          throw new Error('API returned unsuccessful response');
+        }
+
+        setRealActivityData(responseData.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching activity data:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActivityData();
+
+    // Set up polling for real-time updates
+    const interval = setInterval(fetchActivityData, 5000); // Update every 10 seconds
+
+    return () => clearInterval(interval);
+  }, [useRealData]);
+
+  // Determine which data and loading state to use
+  const finalActivityData = useRealData ? realActivityData : mockActivityData;
+  const isLoading = useRealData ? loading : mockLoading;
+  const currentError = useRealData ? error : mockError;
+
+  if (isLoading) {
     return (
       <div
         className={`flex items-center justify-center ${className}`}
         style={{ width: '100%', aspectRatio: '1863/1069.5' }}>
-        <div className="text-lg">Loading heat map...</div>
+        <div className="text-lg">Загрузка карты </div>
       </div>
     );
   }
 
-  if (error) {
+  if (currentError) {
     return (
       <div
         className={`flex items-center justify-center ${className}`}
         style={{ width: '100%', aspectRatio: '1863/1069.5' }}>
-        <div className="text-lg text-red-500">Error loading heat map: {error}</div>
+        <div className="text-lg text-red-500">Ошибка загрузки карты: {currentError}</div>
       </div>
     );
   }
 
-  return <HeatMap activityData={activityData} className={className} />;
+  return <HeatMap activityData={finalActivityData} className={className} />;
 };
