@@ -195,7 +195,7 @@ const ClothesPage = () => {
     const intervalId = setInterval(async () => {
       const newItems = await fetchItems();
       setCurrentItems(newItems);
-    }, 1000); // Check every second
+    }, 2000); // Check every second
 
     return () => clearInterval(intervalId);
   }, []);
@@ -327,9 +327,9 @@ const ClothesPage = () => {
   // Clean up old notifications after 10 seconds
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
-      const thirtySecondsAgo = Date.now() - 10 * 1000;
+      const thirtySecondsAgo = Date.now() - 4 * 1000;
       setStorenItems((prev) => prev.filter((item) => item.timestamp > thirtySecondsAgo));
-    }, 10000); // Check every 10 seconds
+    }, 4000); // Check every 10 seconds
 
     return () => clearInterval(cleanupInterval);
   }, []);
