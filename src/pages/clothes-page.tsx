@@ -159,13 +159,16 @@ const ClothesPage = () => {
       let totalCount = 0;
       if (Array.isArray(data)) {
         data.forEach((item) => {
+          console.log(`Item: ${item.name}`);
           if (Array.isArray(item.sizes)) {
             // @ts-ignore
             item.sizes.forEach((sizeObj) => {
+              console.log(`  Size: ${sizeObj.size}, Amount: ${sizeObj.amount}`);
               totalCount += sizeObj.amount || 0;
             });
           }
         });
+        console.log('Final total count:', totalCount);
       }
       setTotalItemCount(totalCount);
 
