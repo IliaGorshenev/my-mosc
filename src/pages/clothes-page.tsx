@@ -245,7 +245,7 @@ const ClothesPage = () => {
               // @ts-ignore
               name: `${prevItem.name} (${prevSize.size}) - ${amountMissing} шт.`,
               timestamp: Date.now(),
-              confirmationTime: Date.now() + 4000, // 4 seconds from now
+              confirmationTime: Date.now() + 2000, // 4 seconds from now
               confirmed: false,
             });
           }
@@ -294,7 +294,7 @@ const ClothesPage = () => {
 
         // Keep tracking this potential theft if it's not yet time to confirm
         // or if it's been confirmed but we're still within the tracking window
-        return now < theft.confirmationTime + 3000; // Keep for 10 more seconds after confirmation time
+        return now < theft.confirmationTime + 10000; // Keep for 10 more seconds after confirmation time
       });
 
       // Add confirmed thefts to the stolen items list
@@ -302,7 +302,7 @@ const ClothesPage = () => {
         console.log('Confirmed thefts:', confirmedThefts);
         setStorenItems((prev) => [...confirmedThefts, ...prev]);
       }
-    }, 1000); // Check every second
+    }, 2000); // Check every second
 
     return () => clearInterval(checkTheftsInterval);
   }, [currentItems]);
@@ -335,9 +335,9 @@ const ClothesPage = () => {
   // Clean up old notifications after 10 seconds
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
-      const thirtySecondsAgo = Date.now() - 4 * 1000;
+      const thirtySecondsAgo = Date.now() - 5 * 1000;
       setStorenItems((prev) => prev.filter((item) => item.timestamp > thirtySecondsAgo));
-    }, 4000); // Check every 10 seconds
+    }, 1000); // Check every 10 seconds
 
     return () => clearInterval(cleanupInterval);
   }, []);
