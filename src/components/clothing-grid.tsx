@@ -56,7 +56,7 @@ const products = [
   {
     id: 6,
     name: 'Бомбер на кнопках Москва',
-    image: '/clothes-5.svg',
+    image: '/clothes-10.svg',
     colors: ['#000000', '#FFFFFF', '#BD93FF'],
     sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
   },
@@ -387,7 +387,7 @@ export const ClothingGrid: React.FC = () => {
         // Create a mapping between API product names and our hardcoded products
         const productNameMapping: Record<string, number> = {
           'футболка оверсайз москва': 2, // Will match to clothes-1.svg
-          бомбер: 6, // Will match to clothes-6.svg
+          бомбер: 10, // Will match to clothes-6.svg
           'толстовка на молнии москва': 5, // Will match to clothes-5.svg
           'худи оверсайз москва': 4, // Will match to clothes-4.svg
           'костюм космонавта детский': 9, // Will match to clothes-9.svg

@@ -130,6 +130,7 @@ const ClothesPage = () => {
   const [stolenItems, setStorenItems] = useAtom(stolenItemsAtom);
   const [currentItems, setCurrentItems] = useAtom(currentItemsAtom);
   const [lastFetchedItems, setLastFetchedItems] = useState<string[]>([]);
+  const [totalItemCount, setTotalItemCount] = useState(0);
   // Mock function to fetch items (replace with your actual API call)
   // Real function to fetch items from the API
   const fetchItems = async () => {
@@ -143,6 +144,18 @@ const ClothesPage = () => {
 
       const data = await response.json();
 
+      let totalCount = 0;
+      if (Array.isArray(data)) {
+        data.forEach((item) => {
+          if (Array.isArray(item.sizes)) {
+            // @ts-ignore
+            item.sizes.forEach((sizeObj) => {
+              totalCount += sizeObj.amount || 0;
+            });
+          }
+        });
+      }
+      setTotalItemCount(totalCount);
       // Transform the API data to match our expected format
       // Assuming the API returns an array of items with IDs or names
       const itemIds = Array.isArray(data)
@@ -213,9 +226,9 @@ const ClothesPage = () => {
   // Clean up old notifications after 5 minutes
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
-      const thirtySecondsAgo = Date.now() - 30 * 1000;
+      const thirtySecondsAgo = Date.now() - 10 * 1000;
       setStorenItems((prev) => prev.filter((item) => item.timestamp > thirtySecondsAgo));
-    }, 30000); // Check every 30 seconds
+    }, 10000); // Check every 30 seconds
 
     return () => clearInterval(cleanupInterval);
   }, []);
@@ -251,7 +264,7 @@ const ClothesPage = () => {
         <ThreeColumnGrid
           slot1={
             <BorderBlock className="bg-[#E60528] w-[590px] h-full">
-             <ShelfOccupancyBlock2 title="Всего товаров" percentage={currentItems.length || 0} />
+              <ShelfOccupancyBlock2 title="Всего товаров" percentage={totalItemCount} />
             </BorderBlock>
           }
           slot2={
