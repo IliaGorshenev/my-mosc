@@ -132,7 +132,7 @@ const ShopPage = () => {
     fetchShelfData();
 
     // Set up polling to refresh data periodically
-    const intervalId = setInterval(fetchShelfData, 30000); // Refresh every 30 seconds
+    const intervalId = setInterval(fetchShelfData, 5000); // Refresh every 30 seconds
 
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, []);
