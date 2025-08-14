@@ -5,7 +5,7 @@ import { ThreeColumnGrid } from '@/components/footer-grid';
 import { Header } from '@/components/header';
 import { GridLayout } from '@/layouts/grid';
 import { useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ClothingItem, currentItemsAtom, stolenItemsAtom } from './clothes';
 import { rfidData, rfidItems, rfidRetailData, rfidRetailItems } from './const';
 import { liveIcon } from './pose-page';
@@ -127,11 +127,21 @@ export const ShelfOccupancyBlock2 = ({
     </div>
   );
 };
+
+type PotentialTheft = {
+  id: string;
+  name: string;
+  timestamp: number;
+  confirmationTime: number;
+  confirmed: boolean;
+};
+
 const ClothesPage = () => {
   const [stolenItems, setStorenItems] = useAtom(stolenItemsAtom);
   const [currentItems, setCurrentItems] = useAtom(currentItemsAtom);
   const [lastFetchedItems, setLastFetchedItems] = useState<string[]>([]);
   const [totalItemCount, setTotalItemCount] = useState(0);
+  const potentialTheftsRef = useRef<PotentialTheft[]>([]);
   // Mock function to fetch items (replace with your actual API call)
   // Real function to fetch items from the API
 
@@ -192,22 +202,23 @@ const ClothesPage = () => {
 
   useEffect(() => {
     if (lastFetchedItems.length > 0) {
-      // Check for stolen items by comparing previous and current state
-      const stolenItemsDetected: ClothingItem[] = [];
+      // Check for potential stolen items by comparing previous and current state
+      const newPotentialThefts: PotentialTheft[] = [];
 
       lastFetchedItems.forEach((prevItem) => {
         // Find the corresponding item in current items
-
         // @ts-ignore
         const currentItem = currentItems.find((item) => item.name === prevItem.name);
 
         if (!currentItem) {
           // The entire category is missing
-          stolenItemsDetected.push({
+          newPotentialThefts.push({
             id: Math.random().toString(36).substring(2, 9),
             // @ts-ignore
             name: prevItem.name,
             timestamp: Date.now(),
+            confirmationTime: Date.now() + 4000, // 4 seconds from now
+            confirmed: false,
           });
           return;
         }
@@ -223,20 +234,21 @@ const ClothesPage = () => {
               ? prevSize.amount
               : prevSize.amount - currentSize.amount;
 
-            stolenItemsDetected.push({
+            newPotentialThefts.push({
               id: Math.random().toString(36).substring(2, 9),
               // @ts-ignore
               name: `${prevItem.name} (${prevSize.size}) - ${amountMissing} шт.`,
               timestamp: Date.now(),
+              confirmationTime: Date.now() + 4000, // 4 seconds from now
+              confirmed: false,
             });
           }
         });
       });
 
-      // If we detected any stolen items, update the state
-      if (stolenItemsDetected.length > 0) {
-        // Take the most recent stolen item (or you could show all of them)
-        setStorenItems((prev) => [...stolenItemsDetected, ...prev]);
+      // Add new potential thefts to our tracking ref
+      if (newPotentialThefts.length > 0) {
+        potentialTheftsRef.current = [...potentialTheftsRef.current, ...newPotentialThefts];
       }
     }
 
@@ -245,12 +257,79 @@ const ClothesPage = () => {
     setLastFetchedItems(currentItems);
   }, [currentItems]);
 
-  // Clean up old notifications after 5 minutes
+  // Separate effect to check for confirmed thefts
+  useEffect(() => {
+    const checkTheftsInterval = setInterval(() => {
+      const now = Date.now();
+      const confirmedThefts: ClothingItem[] = [];
+
+      // Check which potential thefts have passed their confirmation time
+      potentialTheftsRef.current = potentialTheftsRef.current.filter((theft) => {
+        // If it's time to confirm and it hasn't been confirmed yet
+        if (now >= theft.confirmationTime && !theft.confirmed) {
+          // Check if the item is still missing in the current data
+          // @ts-ignore
+          const itemName = theft.name.split(' (')[0]; // Extract base item name
+          // @ts-ignore
+          const currentItem = currentItems.find((item) => item.name === itemName);
+
+          // If the item is still missing or has reduced quantity, confirm the theft
+          if (!currentItem || isStillMissing(theft, currentItem)) {
+            confirmedThefts.push({
+              id: theft.id,
+              name: theft.name,
+              timestamp: now,
+            });
+            theft.confirmed = true;
+            return false; // Remove from potential thefts
+          }
+        }
+
+        // Keep tracking this potential theft if it's not yet time to confirm
+        // or if it's been confirmed but we're still within the tracking window
+        return now < theft.confirmationTime + 10000; // Keep for 10 more seconds after confirmation time
+      });
+
+      // Add confirmed thefts to the stolen items list
+      if (confirmedThefts.length > 0) {
+        setStorenItems((prev) => [...confirmedThefts, ...prev]);
+      }
+    }, 1000); // Check every second
+
+    return () => clearInterval(checkTheftsInterval);
+  }, [currentItems]);
+
+  // Helper function to check if an item is still missing
+  const isStillMissing = (theft: PotentialTheft, currentItem: any) => {
+    // If the theft includes a size specification
+    if (theft.name.includes('(')) {
+      const sizePart = theft.name.split('(')[1].split(')')[0].trim();
+      const size = sizePart.split(' -')[0].trim();
+
+      // Check if this size is still missing or has reduced quantity
+      const currentSize = currentItem.sizes.find((s: any) => s.size === size);
+      return !currentSize || currentSize.amount < getOriginalAmount(theft);
+    }
+
+    // For whole item thefts, just check if the item exists
+    return false;
+  };
+
+  // Helper to extract the original amount from the theft name
+  const getOriginalAmount = (theft: PotentialTheft) => {
+    if (theft.name.includes('шт.')) {
+      const amountStr = theft.name.split('- ')[1].split(' шт.')[0];
+      return parseInt(amountStr, 10);
+    }
+    return 0;
+  };
+
+  // Clean up old notifications after 10 seconds
   useEffect(() => {
     const cleanupInterval = setInterval(() => {
       const thirtySecondsAgo = Date.now() - 10 * 1000;
       setStorenItems((prev) => prev.filter((item) => item.timestamp > thirtySecondsAgo));
-    }, 10000); // Check every 30 seconds
+    }, 10000); // Check every 10 seconds
 
     return () => clearInterval(cleanupInterval);
   }, []);
