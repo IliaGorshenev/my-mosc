@@ -1,13 +1,20 @@
+// You'll need to update this file to change the atom type
 import { atom } from 'jotai';
 
-// Define types for our items
-export interface ClothingItem {
+export type ClothingItem = {
   id: string;
   name: string;
   timestamp: number;
-  sizesTaken?: Record<string, number>;
-}
+};
 
-// Create atoms for tracking items and notifications
+export type RFIDItem = {
+  name: string;
+  sizes: Array<{
+    size: string;
+    amount: number;
+  }>;
+  colors?: string[];
+};
+
+export const currentItemsAtom = atom<RFIDItem[]>([]);
 export const stolenItemsAtom = atom<ClothingItem[]>([]);
-export const currentItemsAtom = atom<string[]>([]);

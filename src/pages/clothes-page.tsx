@@ -9,76 +9,15 @@ import { useEffect, useState } from 'react';
 import { ClothingItem, currentItemsAtom, stolenItemsAtom } from './clothes';
 import { rfidData, rfidItems, rfidRetailData, rfidRetailItems } from './const';
 import { liveIcon } from './pose-page';
-const ItemNotification = ({
-  item,
-}: {
-  item: ClothingItem & { sizesTaken?: Record<string, number> };
-}) => {
-  // Format the sizes taken information in a more detailed way
-  const getStolenSizesDisplay = () => {
-    if (!item.sizesTaken) return null;
 
-    const stolenSizes = Object.entries(item.sizesTaken)
-      .filter(([_, count]) => count > 0)
-      .map(([size, count]) => ({ size, count }));
-
-    if (stolenSizes.length === 0) return null;
-
-    return (
-      <div style={{ marginTop: '16px' }}>
-        <h4
-          style={{
-            color: '#191919',
-            fontFamily: 'Inter',
-            fontSize: '36px',
-            fontWeight: 500,
-            margin: '0 0 8px 0',
-          }}>
-          Украденные размеры:
-        </h4>
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '16px',
-            marginTop: '8px',
-          }}>
-          {stolenSizes.map(({ size, count }) => (
-            <div
-              key={size}
-              style={{
-                backgroundColor: '#F5F5F5',
-                borderRadius: '12px',
-                padding: '8px 16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <span
-                style={{
-                  color: '#E60528',
-                  fontFamily: 'Inter',
-                  fontSize: '42px',
-                  fontWeight: 700,
-                }}>
-                {size}
-              </span>
-              <span
-                style={{
-                  color: '#191919',
-                  fontFamily: 'Inter',
-                  fontSize: '32px',
-                  fontWeight: 500,
-                  marginLeft: '8px',
-                }}>
-                × {count}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
+const ItemNotification = ({ item }: { item: ClothingItem }) => {
+  // Calculate time ago
+  // const getTimeAgo = () => {
+  //   const seconds = Math.floor((Date.now() - item.timestamp) / 1000);
+  //   if (seconds < 60) return `${seconds} сек. назад`;
+  //   const minutes = Math.floor(seconds / 60);
+  //   return `${minutes} мин. назад`;
+  // };
 
   return (
     <div
@@ -116,13 +55,10 @@ const ItemNotification = ({
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: '120%',
-          marginBottom: '16px',
+          marginBottom: 0,
         }}>
         Взят с полки, но не оплачен!
       </p>
-
-      {/* Display stolen sizes */}
-      {getStolenSizesDisplay()}
     </div>
   );
 };
@@ -194,23 +130,10 @@ export const ShelfOccupancyBlock2 = ({
 const ClothesPage = () => {
   const [stolenItems, setStorenItems] = useAtom(stolenItemsAtom);
   const [currentItems, setCurrentItems] = useAtom(currentItemsAtom);
-  // @ts-ignore
   const [lastFetchedItems, setLastFetchedItems] = useState<string[]>([]);
   const [totalItemCount, setTotalItemCount] = useState(0);
   // Mock function to fetch items (replace with your actual API call)
   // Real function to fetch items from the API
-  type ItemWithSizes = {
-    name: string;
-    sizes: {
-      XS: number;
-      S: number;
-      M: number;
-      L: number;
-      XL: number;
-    };
-  };
-
-  const [lastSizeData, setLastSizeData] = useState<Record<string, ItemWithSizes>>({});
 
   const fetchItems = async () => {
     try {
@@ -223,139 +146,31 @@ const ClothesPage = () => {
 
       const data = await response.json();
 
-      // Process size data for stolen item detection
-      const currentSizeData: Record<string, ItemWithSizes> = {};
       let totalCount = 0;
-
       if (Array.isArray(data)) {
         data.forEach((item) => {
-          // Initialize size object for this item
-          const sizeObj = { XS: 0, S: 0, M: 0, L: 0, XL: 0 };
-
           if (Array.isArray(item.sizes)) {
-            item.sizes.forEach((sizeItem: any) => {
-              // Handle combined sizes like "S-M"
-              if (sizeItem.size && sizeItem.size.includes('-')) {
-                const [firstSize, secondSize] = sizeItem.size.split('-');
-
-                // Distribute the amount between the two sizes
-                if (firstSize in sizeObj) {
-                  sizeObj[firstSize as keyof typeof sizeObj] += Math.ceil(sizeItem.amount / 2);
-                }
-
-                if (secondSize in sizeObj) {
-                  sizeObj[secondSize as keyof typeof sizeObj] += Math.floor(sizeItem.amount / 2);
-                }
-              }
-              // Handle sizes like "XXL-XXXL" that aren't in our Size interface
-              else if (
-                sizeItem.size &&
-                (sizeItem.size.startsWith('XXL') || sizeItem.size.startsWith('XXXL'))
-              ) {
-                // Assign to XL as fallback
-                sizeObj.XL += sizeItem.amount || 0;
-              }
-              // Handle regular sizes
-              else if (sizeItem.size && sizeItem.size in sizeObj) {
-                sizeObj[sizeItem.size as keyof typeof sizeObj] += sizeItem.amount || 0;
-              }
+            // @ts-ignore
+            item.sizes.forEach((sizeObj) => {
+              totalCount += sizeObj.amount || 0;
             });
           }
-
-          // Store the processed size data for this item
-          if (item.name) {
-            currentSizeData[item.name] = {
-              name: item.name,
-              sizes: sizeObj,
-            };
-          }
-
-          // Calculate total count
-          Object.values(sizeObj).forEach((count) => {
-            totalCount += count;
-          });
         });
       }
-
-      // Check for stolen items by comparing with last size data
-      if (Object.keys(lastSizeData).length > 0) {
-        for (const [itemName, lastItem] of Object.entries(lastSizeData)) {
-          const currentItem = currentSizeData[itemName];
-
-          // If item exists in both datasets, check if any size decreased
-          if (currentItem) {
-            let sizeWasTaken = false;
-            const sizesTaken: Record<string, number> = { XS: 0, S: 0, M: 0, L: 0, XL: 0 };
-
-            // Check each size category
-            for (const size of ['XS', 'S', 'M', 'L', 'XL'] as const) {
-              if (currentItem.sizes[size] < lastItem.sizes[size]) {
-                sizeWasTaken = true;
-                sizesTaken[size] = lastItem.sizes[size] - currentItem.sizes[size];
-              }
-            }
-
-            // If any size was taken, create a stolen item notification
-            if (sizeWasTaken) {
-              const mostRecentItem = {
-                id: Math.random().toString(36).substring(2, 9),
-                name: itemName,
-                timestamp: Date.now(),
-                sizesTaken: sizesTaken,
-              };
-
-              // Replace the entire array with just the new item
-              setStorenItems([mostRecentItem]);
-              break; // Only show one notification at a time
-            }
-          }
-          // If item completely disappeared from current data
-          else if (!currentItem) {
-            const mostRecentItem = {
-              id: Math.random().toString(36).substring(2, 9),
-              name: itemName,
-              timestamp: Date.now(),
-              sizesTaken: lastItem.sizes, // All sizes were taken
-            };
-
-            // Replace the entire array with just the new item
-            setStorenItems([mostRecentItem]);
-            break; // Only show one notification at a time
-          }
-        }
-      }
-
-      // Update last size data for next comparison
-      setLastSizeData(currentSizeData);
-
-      // Update total item count
       setTotalItemCount(totalCount);
 
-      // Transform the API data to match our expected format for currentItems
-      const itemIds = Array.isArray(data)
-        ? data.map(
-            (item: any) =>
-              item.id || item.name || `Item${Math.random().toString(36).substring(2, 7)}`,
-          )
-        : [];
-
-      return itemIds;
+      // Return the full data structure instead of just IDs
+      return Array.isArray(data) ? data : [];
     } catch (error) {
       console.error('Error fetching RFID items:', error);
 
       // Fallback to mock data in case of error
       return [
-        'Футболка оверсайз Москва',
-        'Бомбер на кнопках Москва',
-        'Толстовка на молнии Москва',
-        'Худи оверсайз Москва',
-        'Лонгслив мужской Москва',
-        'Костюм космонавта детский',
-        'Футболка женская Москва',
-        'Толстовка женская Москва',
-        'Шапка Москва',
-        'Шарф Москва',
-      ].slice(0, Math.floor(Math.random() * 3) + 8); // Return 8-10 items randomly
+        { name: 'Футболка оверсайз Москва', sizes: [{ size: 'M', amount: 3 }] },
+        { name: 'Бомбер на кнопках Москва', sizes: [{ size: 'S', amount: 2 }] },
+        { name: 'Толстовка на молнии Москва', sizes: [{ size: 'L', amount: 1 }] },
+        // Add more mock items as needed
+      ];
     }
   };
 
@@ -375,9 +190,58 @@ const ClothesPage = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // We can remove or simplify this effect since we're now handling stolen item detection in fetchItems
   useEffect(() => {
+    if (lastFetchedItems.length > 0) {
+      // Check for stolen items by comparing previous and current state
+      const stolenItemsDetected: ClothingItem[] = [];
+
+      lastFetchedItems.forEach((prevItem) => {
+        // Find the corresponding item in current items
+
+        // @ts-ignore
+        const currentItem = currentItems.find((item) => item.name === prevItem.name);
+
+        if (!currentItem) {
+          // The entire category is missing
+          stolenItemsDetected.push({
+            id: Math.random().toString(36).substring(2, 9),
+            // @ts-ignore
+            name: prevItem.name,
+            timestamp: Date.now(),
+          });
+          return;
+        }
+
+        // Check if any size has decreased in quantity
+        // @ts-ignore
+        prevItem.sizes.forEach((prevSize) => {
+          const currentSize = currentItem.sizes.find((size) => size.size === prevSize.size);
+
+          if (!currentSize || currentSize.amount < prevSize.amount) {
+            // This size has decreased in quantity or is missing
+            const amountMissing = !currentSize
+              ? prevSize.amount
+              : prevSize.amount - currentSize.amount;
+
+            stolenItemsDetected.push({
+              id: Math.random().toString(36).substring(2, 9),
+              // @ts-ignore
+              name: `${prevItem.name} (${prevSize.size}) - ${amountMissing} шт.`,
+              timestamp: Date.now(),
+            });
+          }
+        });
+      });
+
+      // If we detected any stolen items, update the state
+      if (stolenItemsDetected.length > 0) {
+        // Take the most recent stolen item (or you could show all of them)
+        setStorenItems([stolenItemsDetected[0]]);
+      }
+    }
+
     // Update last fetched items
+    // @ts-ignore
     setLastFetchedItems(currentItems);
   }, [currentItems]);
 
