@@ -23,49 +23,49 @@ const products = [
     name: 'Футболка оверсайз Москва',
     image: '/clothes-1.svg',
     colors: ['#BD93FF', '#FFFFFF', '#64ACFF'],
-    sizes: { XS: 2, S: 2, M: 2, L: 1, XL: 1 },
+    sizes: { XS: 2, S: 2, M: 2, L: 1, XL: 1, XXL: 0 },
   },
   {
     id: 2,
     name: 'Футболка оверсайз Москва',
     image: '/clothes-2.svg',
     colors: ['#E60528', '#64ACFF', '#BD93FF'],
-    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
   },
   {
     id: 3,
     name: 'Лонгслив мужской МОСКВА',
     image: '/clothes-3.svg',
     colors: ['#E60528'],
-    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
   },
   {
     id: 4,
     name: 'Худи оверсайз Москва',
     image: '/clothes-4.svg',
     colors: ['#FFC0CB', '#FFFFFF', '#000000'],
-    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
   },
   {
     id: 5,
     name: 'Толстовка на молнии Москва',
     image: '/clothes-6.svg',
     colors: ['#BD93FF', '#000000', '#FFFFFF'],
-    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
   },
   {
     id: 6,
     name: 'Бомбер на кнопках Москва',
     image: '/clothes-10.svg',
     colors: ['#000000', '#FFFFFF', '#BD93FF'],
-    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
   },
   {
     id: 9,
     name: 'Детский костюм космонавта',
     image: '/clothes-9.svg',
     colors: ['#000000', '#FFFFFF', '#E60528'],
-    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0 },
+    sizes: { XS: 0, S: 0, M: 0, L: 0, XL: 0, XXL: 0 },
     isSpecial: true, // Mark this as a special item
   },
 ];
@@ -76,6 +76,7 @@ interface Size {
   M: number;
   L: number;
   XL: number;
+  XXL: number;
 }
 
 interface Product {
@@ -434,7 +435,7 @@ export const ClothingGrid: React.FC = () => {
               : ['#000000'];
 
           // Transform sizes array to Size object
-          const sizes: Size = { XS: 0, S: 0, M: 0, L: 0, XL: 0 };
+          const sizes: Size = { XS: 0, S: 0, M: 0, L: 0, XL: 0, XXL: 0 };
 
           if (Array.isArray(item.sizes)) {
             item.sizes.forEach((sizeItem: { size: string; amount: number }) => {
