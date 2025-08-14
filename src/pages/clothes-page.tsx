@@ -233,7 +233,10 @@ const ClothesPage = () => {
             const amountMissing = !currentSize
               ? prevSize.amount
               : prevSize.amount - currentSize.amount;
-
+            console.log(
+              // @ts-ignore
+              `Detected potential theft: ${prevItem.name} (${prevSize.size}) - ${amountMissing} шт.`,
+            );
             newPotentialThefts.push({
               id: Math.random().toString(36).substring(2, 9),
               // @ts-ignore
@@ -288,11 +291,12 @@ const ClothesPage = () => {
 
         // Keep tracking this potential theft if it's not yet time to confirm
         // or if it's been confirmed but we're still within the tracking window
-        return now < theft.confirmationTime + 10000; // Keep for 10 more seconds after confirmation time
+        return now < theft.confirmationTime + 5000; // Keep for 10 more seconds after confirmation time
       });
 
       // Add confirmed thefts to the stolen items list
       if (confirmedThefts.length > 0) {
+        console.log('Confirmed thefts:', confirmedThefts);
         setStorenItems((prev) => [...confirmedThefts, ...prev]);
       }
     }, 1000); // Check every second
