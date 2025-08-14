@@ -5,6 +5,7 @@ export interface ClothingItem {
   id: string;
   name: string;
   timestamp: number;
+  sizesTaken?: Record<string, number>;
 }
 
 // Create atoms for tracking items and notifications

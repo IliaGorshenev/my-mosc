@@ -9,14 +9,22 @@ import { useEffect, useState } from 'react';
 import { ClothingItem, currentItemsAtom, stolenItemsAtom } from './clothes';
 import { rfidData, rfidItems, rfidRetailData, rfidRetailItems } from './const';
 import { liveIcon } from './pose-page';
-const ItemNotification = ({ item }: { item: ClothingItem }) => {
-  // Calculate time ago
-  // const getTimeAgo = () => {
-  //   const seconds = Math.floor((Date.now() - item.timestamp) / 1000);
-  //   if (seconds < 60) return `${seconds} сек. назад`;
-  //   const minutes = Math.floor(seconds / 60);
-  //   return `${minutes} мин. назад`;
-  // };
+const ItemNotification = ({
+  item,
+}: {
+  item: ClothingItem & { sizesTaken?: Record<string, number> };
+}) => {
+  // Format the sizes taken information
+  const formatSizesTaken = () => {
+    if (!item.sizesTaken) return '';
+
+    const sizeEntries = Object.entries(item.sizesTaken)
+      .filter(([_, count]) => count > 0)
+      .map(([size, count]) => `${size}: ${count}`);
+
+    if (sizeEntries.length === 0) return '';
+    return `(${sizeEntries.join(', ')})`;
+  };
 
   return (
     <div
@@ -43,7 +51,7 @@ const ItemNotification = ({ item }: { item: ClothingItem }) => {
             margin: 0,
             marginBottom: '8px',
           }}>
-          {item.name}
+          {item.name} {formatSizesTaken()}
         </h3>
       </div>
       <p
@@ -220,13 +228,13 @@ const ClothesPage = () => {
           // If item exists in both datasets, check if any size decreased
           if (currentItem) {
             let sizeWasTaken = false;
-            let totalSizesTaken = 0;
+            const sizesTaken: Record<string, number> = { XS: 0, S: 0, M: 0, L: 0, XL: 0 };
 
             // Check each size category
             for (const size of ['XS', 'S', 'M', 'L', 'XL'] as const) {
               if (currentItem.sizes[size] < lastItem.sizes[size]) {
                 sizeWasTaken = true;
-                totalSizesTaken += lastItem.sizes[size] - currentItem.sizes[size];
+                sizesTaken[size] = lastItem.sizes[size] - currentItem.sizes[size];
               }
             }
 
@@ -236,6 +244,7 @@ const ClothesPage = () => {
                 id: Math.random().toString(36).substring(2, 9),
                 name: itemName,
                 timestamp: Date.now(),
+                sizesTaken: sizesTaken,
               };
 
               // Replace the entire array with just the new item
@@ -249,6 +258,7 @@ const ClothesPage = () => {
               id: Math.random().toString(36).substring(2, 9),
               name: itemName,
               timestamp: Date.now(),
+              sizesTaken: lastItem.sizes, // All sizes were taken
             };
 
             // Replace the entire array with just the new item
