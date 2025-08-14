@@ -259,6 +259,7 @@ const ClothesPage = () => {
 
   // Separate effect to check for confirmed thefts
   useEffect(() => {
+    console.log('Checking for confirmed thefts...', stolenItems, currentItems);
     const checkTheftsInterval = setInterval(() => {
       const now = Date.now();
       const confirmedThefts: ClothingItem[] = [];
