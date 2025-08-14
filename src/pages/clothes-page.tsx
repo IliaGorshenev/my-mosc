@@ -198,7 +198,7 @@ const ClothesPage = () => {
     const intervalId = setInterval(async () => {
       const newItems = await fetchItems();
       setCurrentItems(newItems);
-    }, 2000); // Check every second
+    }, 3000); // Check every second
 
     return () => clearInterval(intervalId);
   }, []);

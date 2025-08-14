@@ -494,7 +494,7 @@ export const ClothingGrid: React.FC = () => {
 
     const intervalId = setInterval(() => {
       fetchClothes();
-    }, 2000);
+    }, 3000);
 
     // Clean up the interval when component unmounts
     return () => clearInterval(intervalId);
