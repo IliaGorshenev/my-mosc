@@ -236,7 +236,7 @@ const ClothesPage = () => {
       // If we detected any stolen items, update the state
       if (stolenItemsDetected.length > 0) {
         // Take the most recent stolen item (or you could show all of them)
-        setStorenItems([stolenItemsDetected[0]]);
+        setStorenItems((prev) => [...stolenItemsDetected, ...prev]);
       }
     }
 
