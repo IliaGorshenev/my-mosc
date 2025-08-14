@@ -14,16 +14,70 @@ const ItemNotification = ({
 }: {
   item: ClothingItem & { sizesTaken?: Record<string, number> };
 }) => {
-  // Format the sizes taken information
-  const formatSizesTaken = () => {
-    if (!item.sizesTaken) return '';
+  // Format the sizes taken information in a more detailed way
+  const getStolenSizesDisplay = () => {
+    if (!item.sizesTaken) return null;
 
-    const sizeEntries = Object.entries(item.sizesTaken)
+    const stolenSizes = Object.entries(item.sizesTaken)
       .filter(([_, count]) => count > 0)
-      .map(([size, count]) => `${size}: ${count}`);
+      .map(([size, count]) => ({ size, count }));
 
-    if (sizeEntries.length === 0) return '';
-    return `(${sizeEntries.join(', ')})`;
+    if (stolenSizes.length === 0) return null;
+
+    return (
+      <div style={{ marginTop: '16px' }}>
+        <h4
+          style={{
+            color: '#191919',
+            fontFamily: 'Inter',
+            fontSize: '36px',
+            fontWeight: 500,
+            margin: '0 0 8px 0',
+          }}>
+          Украденные размеры:
+        </h4>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '16px',
+            marginTop: '8px',
+          }}>
+          {stolenSizes.map(({ size, count }) => (
+            <div
+              key={size}
+              style={{
+                backgroundColor: '#F5F5F5',
+                borderRadius: '12px',
+                padding: '8px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <span
+                style={{
+                  color: '#E60528',
+                  fontFamily: 'Inter',
+                  fontSize: '42px',
+                  fontWeight: 700,
+                }}>
+                {size}
+              </span>
+              <span
+                style={{
+                  color: '#191919',
+                  fontFamily: 'Inter',
+                  fontSize: '32px',
+                  fontWeight: 500,
+                  marginLeft: '8px',
+                }}>
+                × {count}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -51,7 +105,7 @@ const ItemNotification = ({
             margin: 0,
             marginBottom: '8px',
           }}>
-          {item.name} {formatSizesTaken()}
+          {item.name}
         </h3>
       </div>
       <p
@@ -62,10 +116,13 @@ const ItemNotification = ({
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: '120%',
-          marginBottom: 0,
+          marginBottom: '16px',
         }}>
         Взят с полки, но не оплачен!
       </p>
+
+      {/* Display stolen sizes */}
+      {getStolenSizesDisplay()}
     </div>
   );
 };
