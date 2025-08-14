@@ -220,7 +220,7 @@ const ClothesPage = () => {
             // @ts-ignore
             name: prevItem.name,
             timestamp: Date.now(),
-            confirmationTime: Date.now() + 4000, // 4 seconds from now
+            confirmationTime: Date.now() + 3000, // 4 seconds from now
             confirmed: false,
           });
           return;
@@ -294,7 +294,7 @@ const ClothesPage = () => {
 
         // Keep tracking this potential theft if it's not yet time to confirm
         // or if it's been confirmed but we're still within the tracking window
-        return now < theft.confirmationTime + 5000; // Keep for 10 more seconds after confirmation time
+        return now < theft.confirmationTime + 3000; // Keep for 10 more seconds after confirmation time
       });
 
       // Add confirmed thefts to the stolen items list
