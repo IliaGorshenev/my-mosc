@@ -72,7 +72,7 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
         <BarChart
           data={ageData}
           dataKey="value"
-          height={323}
+          height={293}
           styles={{
             bar: '#E60528',
             grid: 'transparent',
