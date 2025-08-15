@@ -30,7 +30,7 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
     <div
       style={{
         display: 'flex',
-
+        position: 'relative',
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
@@ -39,7 +39,7 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
         alignSelf: 'stretch',
       }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' , marginBottom: 'auto'}}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: 'auto' }}>
         <h2
           style={{
             color: '#191919',
@@ -68,7 +68,7 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
       </div>
 
       {/* Chart */}
-      <div style={{ width: '100%', marginTop: 'auto' }}>
+      <div style={{ width: '100%', position: 'absolute', bottom: '0', marginTop: 'auto' }}>
         <BarChart
           data={ageData}
           dataKey="value"
@@ -78,7 +78,6 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
             grid: 'transparent',
             text: '#B2B2B2',
           }}
-          
         />
       </div>
 
