@@ -73,6 +73,12 @@ export const AgeDiagram = ({ ageData = defaultAgeData }: AgeDiagramProps) => {
           data={ageData}
           dataKey="value"
           height={293}
+          margins={{
+            top: 50, // Adding top margin/padding
+            xAxisPadding: { left: 0, right: 0, top: 20, bottom: 0 },
+            xAxisTickMargin: 0,
+            yAxisTickMargin: 0,
+          }}
           styles={{
             bar: '#E60528',
             grid: 'transparent',

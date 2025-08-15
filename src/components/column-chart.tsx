@@ -29,7 +29,7 @@ type BarChartProps<T = number> = {
     right?: number;
     bottom?: number;
     left?: number;
-    xAxisPadding?: { left: number; right: number };
+    xAxisPadding?: { left: number; right: number, top?: number, bottom?: number };
     xAxisTickMargin?: number;
     yAxisTickMargin?: number;
   };

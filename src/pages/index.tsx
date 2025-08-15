@@ -34,7 +34,7 @@ export default function IndexPage() {
     age: [
       { name: '0-9', value: 2 },
       { name: '10-19', value: 8 },
-      { name: '20-29', value: 320 },
+      { name: '20-29', value: 10000 },
       { name: '30-39', value: 440 },
       { name: '40-49', value: 19 },
       { name: '50-59', value: 3 },
