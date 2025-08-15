@@ -29,7 +29,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = ({ title, subtitle, ite
         style={{
           color: '#000',
           fontFamily: 'Inter',
-          fontSize: '100px',
+          fontSize: '90px',
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: '110%',
@@ -43,7 +43,7 @@ export const ContentBlock: React.FC<ContentBlockProps> = ({ title, subtitle, ite
         style={{
           color: '#000',
           fontFamily: 'Inter',
-          fontSize: '78px',
+          fontSize: '68px',
           fontStyle: 'normal',
           fontWeight: 600,
           lineHeight: '120%',

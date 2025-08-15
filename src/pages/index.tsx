@@ -7,7 +7,7 @@ import { Header } from '@/components/header';
 import { HeatMapContainer } from '@/components/heat-map-container';
 import { SexDiagram } from '@/components/sex-diagram';
 import { GridLayout } from '@/layouts/grid';
-import { useEffect, useMemo, useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { contentBlockData, contentBlockData2, sampleItems, sampleItems2 } from './const';
 
 interface DemographicsData {
@@ -34,8 +34,8 @@ export default function IndexPage() {
     age: [
       { name: '0-9', value: 2 },
       { name: '10-19', value: 8 },
-      { name: '20-29', value: 46 },
-      { name: '30-39', value: 38 },
+      { name: '20-29', value: 320 },
+      { name: '30-39', value: 440 },
       { name: '40-49', value: 19 },
       { name: '50-59', value: 3 },
     ],
@@ -85,14 +85,6 @@ export default function IndexPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const memoizedAgeData = useMemo(
-    () => demographics.age,
-    [
-      // Convert the array to a string for comparison
-      JSON.stringify(demographics.age),
-    ],
-  );
-
   return (
     <GridLayout
       leftSlot1={<Header />}
@@ -113,7 +105,7 @@ export default function IndexPage() {
           }
           slot2={
             <BorderBlock className="h-full pb-0 px-14">
-              <AgeDiagram ageData={memoizedAgeData} />
+              <AgeDiagram ageData={demographics.age} />
             </BorderBlock>
           }
           slot3={
